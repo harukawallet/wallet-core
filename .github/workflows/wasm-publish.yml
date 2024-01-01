@@ -1,0 +1,86 @@
+name: Wasm Publish
+
+on:
+  push:
+    branches: [ master, dev ]
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install system dependencies
+      run: |
+        tools/install-sys-dependencies-linux
+        tools/install-rust-dependencies
+
+    - name: Install emsdk
+      run: tools/install-wasm-dependencies
+
+    - name: Cache internal dependencies
+      id: internal_cache
+      uses: actions/cache@v3
+      with:
+        path: build/local
+        key: ${{ runner.os }}-internal-${{ hashFiles('tools/install-dependencies') }}
+
+    - name: Install internal dependencies
+      run: tools/install-dependencies
+      env:
+        CC: /usr/bin/clang
+        CXX: /usr/bin/clang++
+      if: steps.internal_cache.outputs.cache-hit != 'true'
+
+    - name: Code generation
+      run: |
+        source emsdk/emsdk_env.sh
+        tools/generate-files wasm
+      env:
+        CC: /usr/bin/clang
+        CXX: /usr/bin/clang++
+
+    - name: Build for Wasm
+      run: |
+        source emsdk/emsdk_env.sh
+        tools/wasm-build
+      env:
+        CC: /usr/bin/clang
+        CXX: /usr/bin/clang++
+
+    - name: Node Setup
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@harukawallet'
+
+    - name: Test
+      run: |
+        npm install && npm run build-and-test
+      working-directory: wasm
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifact
+        path: | 
+          wasm/dist/
+          wasm/README.md
+          wasm/package.json
+
+    - name: Publish Package
+      run: npm publish
+      working-directory: wasm
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
