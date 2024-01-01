@@ -1,7 +1,7 @@
-Trust Wallet Core is an open source, cross platform and cross blockchain library, it adds beta support for WebAssembly recently, You can try it out now:
+Haruka Wallet Core is an open source, cross platform and cross blockchain library. It has beta support for WebAssembly:
 
 ```js
-npm install @trustwallet/wallet-core
+npm install @harukawallet/wallet-core
 ```
 
-Documentation will be added to [developer.trustwallet.com](https://developer.trustwallet.com/wallet-core) later, please check out [tests](https://github.com/trustwallet/wallet-core/tree/master/wasm/tests) here for API usages.
+Check out [tests](https://github.com/harukawallet/wallet-core/tree/master/wasm/tests) here for API usages.
