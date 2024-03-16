@@ -1,8 +1,6 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use crate::abi::encode::encode_tokens;
 use crate::abi::non_empty_array::NonEmptyBytes;
@@ -190,7 +188,7 @@ fn encode_array(
 
     // Check if the type definition actually matches the length of items to be encoded.
     if expected_len.is_some() && Some(elements.len()) != expected_len {
-        return Err(MessageSigningError::TypeValueMismatch)?;
+        return Err(MessageSigningError::TypeValueMismatch);
     }
 
     let mut encoded_items = vec![];

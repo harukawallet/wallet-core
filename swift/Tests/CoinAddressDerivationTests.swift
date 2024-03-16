@@ -1,8 +1,6 @@
-// Copyright © 2017-2020 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 import XCTest
 import WalletCore
@@ -115,7 +113,8 @@ class CoinAddressDerivationTests: XCTestCase {
                      .greenfield,
                      .mantle,
                      .zenEON,
-                     .mantaPacific:
+                     .mantaPacific,
+                     .zetaEVM:
                     let expectedResult = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .ronin:
@@ -389,6 +388,12 @@ class CoinAddressDerivationTests: XCTestCase {
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 case .tia:
                     let expectedResult = "celestia142j9u5eaduzd7faumygud6ruhdwme98qpwmfv7"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .nativeZetaChain:
+                    let expectedResult = "zeta13u6g7vqgw074mgmf2ze2cadzvkz9snlwywj304"
+                    assertCoinDerivation(coin, expectedResult, derivedAddress, address)
+                case .dydx:
+                    let expectedResult = "dydx142j9u5eaduzd7faumygud6ruhdwme98qeayaky"
                     assertCoinDerivation(coin, expectedResult, derivedAddress, address)
                 @unknown default:
                     fatalError()

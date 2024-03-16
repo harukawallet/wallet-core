@@ -1,8 +1,6 @@
-// Copyright © 2017-2022 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 #include "Coin.h"
 #include "HexCoding.h"
@@ -72,6 +70,12 @@ TEST(EthereumCompiler, CompileWithSignatures) {
     /// Step 3: Compile transaction info
     auto outputData =
         TransactionCompiler::compileWithSignatures(coin, txInputData, {signature}, {publicKeyData});
+
+    // We dont care about public key in ethereum. It is not part of the transaction.
+    auto outputDataWithoutPubKey =
+        TransactionCompiler::compileWithSignatures(coin, txInputData, {signature}, {});
+
+    EXPECT_EQ(outputData, outputDataWithoutPubKey);
 
     const auto ExpectedTx =
         "f86c0b8504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a0"

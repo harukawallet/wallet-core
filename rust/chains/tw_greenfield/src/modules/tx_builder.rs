@@ -1,8 +1,6 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use crate::address::GreenfieldAddress;
 use crate::public_key::GreenfieldPublicKey;
@@ -58,7 +56,9 @@ impl TxBuilder {
         coin: &dyn CoinContext,
         input: &Proto::SigningInput,
     ) -> SigningResult<GreenfieldSignerInfo> {
-        let public_key = GreenfieldPublicKey::from_bytes(coin, &input.public_key)?;
+        let public_key_params = None;
+        let public_key =
+            GreenfieldPublicKey::from_bytes(coin, &input.public_key, public_key_params)?;
         let sign_mode = match input.signing_mode {
             Proto::SigningMode::Eip712 => GreenfieldSignMode::Eip712,
         };

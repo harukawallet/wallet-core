@@ -1,14 +1,13 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use tw_coin_entry::coin_context::CoinContext;
-use tw_cosmos_sdk::public_key::{CosmosPublicKey, JsonPublicKey, ProtobufPublicKey};
+use tw_cosmos_sdk::public_key::{
+    CosmosPublicKey, JsonPublicKey, ProtobufPublicKey, PublicKeyParams,
+};
 use tw_keypair::ecdsa::secp256k1;
-use tw_keypair::tw::{PrivateKey, PublicKeyType};
-use tw_keypair::{KeyPairError, KeyPairResult};
+use tw_keypair::{tw, KeyPairError, KeyPairResult};
 use tw_memory::Data;
 use tw_proto::{google, to_any};
 
@@ -30,16 +29,26 @@ impl ProtobufPublicKey for GreenfieldPublicKey {
 }
 
 impl CosmosPublicKey for GreenfieldPublicKey {
-    fn from_private_key(_coin: &dyn CoinContext, private_key: &PrivateKey) -> KeyPairResult<Self> {
+    fn from_private_key(
+        _coin: &dyn CoinContext,
+        private_key: &tw::PrivateKey,
+        // Ignore custom public key parameters.
+        _params: Option<PublicKeyParams>,
+    ) -> KeyPairResult<Self> {
         let public_key = private_key
-            .get_public_key_by_type(PublicKeyType::Secp256k1)?
+            .get_public_key_by_type(tw::PublicKeyType::Secp256k1)?
             .to_secp256k1()
             .ok_or(KeyPairError::InvalidPublicKey)?
             .clone();
         Ok(GreenfieldPublicKey(public_key))
     }
 
-    fn from_bytes(_coin: &dyn CoinContext, public_key_bytes: &[u8]) -> KeyPairResult<Self> {
+    fn from_bytes(
+        _coin: &dyn CoinContext,
+        public_key_bytes: &[u8],
+        // Ignore custom public key parameters.
+        _params: Option<PublicKeyParams>,
+    ) -> KeyPairResult<Self> {
         secp256k1::PublicKey::try_from(public_key_bytes).map(GreenfieldPublicKey)
     }
 

@@ -1,15 +1,12 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use serde::Serialize;
 use std::fmt;
 use std::str::FromStr;
-use tw_coin_entry::coin_context::CoinContext;
 use tw_coin_entry::coin_entry::CoinAddress;
-use tw_coin_entry::error::{AddressError, AddressResult};
+use tw_coin_entry::error::AddressError;
 use tw_cosmos_sdk::address::CosmosAddress;
 use tw_evm::address::Address as EthereumAddress;
 use tw_keypair::ecdsa::secp256k1;
@@ -25,14 +22,7 @@ impl GreenfieldAddress {
     }
 }
 
-impl CosmosAddress for GreenfieldAddress {
-    fn from_str_with_coin(_coin: &dyn CoinContext, addr: &str) -> AddressResult<Self>
-    where
-        Self: Sized,
-    {
-        GreenfieldAddress::from_str(addr)
-    }
-}
+impl CosmosAddress for GreenfieldAddress {}
 
 impl CoinAddress for GreenfieldAddress {
     #[inline]

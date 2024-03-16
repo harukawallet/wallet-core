@@ -1,8 +1,6 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 #pragma once
 
@@ -36,7 +34,10 @@ using SS58Prefix = uint32_t;
 /// Declare a dummy prefix to notify the entry to derive a delegated address.
 struct DelegatedPrefix {};
 
-using PrefixVariant = std::variant<Base58Prefix, Bech32Prefix, SS58Prefix, DelegatedPrefix, std::monostate>;
+/// Declare a dummy prefix to notify the entry to derive a firo exchange address.
+struct ExchangePrefix {};
+
+using PrefixVariant = std::variant<Base58Prefix, Bech32Prefix, SS58Prefix, DelegatedPrefix, ExchangePrefix, std::monostate>;
 
 /// Interface for coin-specific entry, used to dispatch calls to coins
 /// Implement this for all coins.

@@ -1,11 +1,10 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use crate::address::BinanceAddress;
 use crate::compiler::BinanceCompiler;
+use crate::modules::wallet_connect::connector::BinanceWalletConnector;
 use crate::signer::BinanceSigner;
 use std::str::FromStr;
 use tw_bech32_address::bech32_prefix::Bech32Prefix;
@@ -16,6 +15,7 @@ use tw_coin_entry::error::AddressResult;
 use tw_coin_entry::modules::json_signer::NoJsonSigner;
 use tw_coin_entry::modules::message_signer::NoMessageSigner;
 use tw_coin_entry::modules::plan_builder::NoPlanBuilder;
+use tw_coin_entry::modules::transaction_decoder::NoTransactionDecoder;
 use tw_keypair::tw::PublicKey;
 use tw_proto::Binance::Proto;
 use tw_proto::TxCompiler::Proto as CompilerProto;
@@ -33,6 +33,8 @@ impl CoinEntry for BinanceEntry {
     type JsonSigner = NoJsonSigner;
     type PlanBuilder = NoPlanBuilder;
     type MessageSigner = NoMessageSigner;
+    type WalletConnector = BinanceWalletConnector;
+    type TransactionDecoder = NoTransactionDecoder;
 
     #[inline]
     fn parse_address(
@@ -87,5 +89,10 @@ impl CoinEntry for BinanceEntry {
         public_keys: Vec<PublicKeyBytes>,
     ) -> Self::SigningOutput {
         BinanceCompiler::compile(coin, input, signatures, public_keys)
+    }
+
+    #[inline]
+    fn wallet_connector(&self) -> Option<Self::WalletConnector> {
+        Some(BinanceWalletConnector)
     }
 }

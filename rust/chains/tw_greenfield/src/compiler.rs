@@ -1,8 +1,6 @@
-// Copyright © 2017-2023 Trust Wallet.
+// SPDX-License-Identifier: Apache-2.0
 //
-// This file is part of Trust. The full Trust copyright notice, including
-// terms governing use, modification, and redistribution, is contained in the
-// file LICENSE at the root of the source code distribution tree.
+// Copyright © 2017 Trust Wallet.
 
 use crate::context::GreenfieldContext;
 use crate::modules::eip712_signer::{Eip712Signer, Eip712TxPreimage};
@@ -73,7 +71,8 @@ impl GreenfieldCompiler {
             public_key,
         } = SingleSignaturePubkey::from_sign_pubkey_list(signatures, public_keys)?;
 
-        let public_key = GreenfieldPublicKey::from_bytes(coin, &public_key)?;
+        let public_key_params = None;
+        let public_key = GreenfieldPublicKey::from_bytes(coin, &public_key, public_key_params)?;
         let signature = GreenfieldSignature::try_from(raw_signature.as_slice())?;
         let signature_bytes = signature.to_vec();
 
