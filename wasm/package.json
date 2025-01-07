@@ -1,6 +1,6 @@
 {
   "name": "@harukawallet/wallet-core",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "wallet core wasm and protobuf models",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
